@@ -118,10 +118,6 @@ export default function MyReports({ user, token, onLogout }) {
                     <h3 data-testid={`report-date-${report._id}`}>
                       Report Date: {report.report_date}
                     </h3>
-                    {/* Display the user's name or account name here */}
-                    <p className="report-user" data-testid={`report-user-${report._id}`}>
-                      Uploaded by: {user?.name || user?.username || 'Unknown User'}
-                    </p>
                     <p className="report-time">
                       Created: {new Date(report.created_at).toLocaleString()}
                     </p>
