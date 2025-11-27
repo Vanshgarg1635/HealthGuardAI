@@ -5,7 +5,7 @@ import ChatWidget from '../components/ChatWidget';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../components/ui/dialog';
-import { Users, UserPlus, Check, X, FileText } from 'lucide-react';
+import { Users, UserPlus, Check, X, FileText, Trash2, Download } from 'lucide-react';
 import { toast } from 'sonner';
 import '../styles/Dashboard.css';
 import '../styles/family.css';
@@ -20,6 +20,7 @@ export default function FamilyDashboard({ user, token, onLogout }) {
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [inviteToken, setInviteToken] = useState('');
   const [loading, setLoading] = useState(true);
+  const [removingMemberId, setRemovingMemberId] = useState(null);
 
   useEffect(() => {
     fetchFamilyData();
@@ -27,6 +28,7 @@ export default function FamilyDashboard({ user, token, onLogout }) {
 
   const fetchFamilyData = async () => {
     try {
+      setLoading(true);
       const [membersRes, reportsRes, invitesRes] = await Promise.all([
         axios.get(`${API}/family/members`, {
           headers: { Authorization: `Bearer ${token}` }
@@ -43,6 +45,7 @@ export default function FamilyDashboard({ user, token, onLogout }) {
       setFamilyReports(reportsRes.data || []);
       setInvites(invitesRes.data || []);
     } catch (error) {
+      console.error('Fetch family data error:', error);
       toast.error('Failed to fetch family data');
     } finally {
       setLoading(false);
@@ -98,29 +101,56 @@ export default function FamilyDashboard({ user, token, onLogout }) {
     }
   };
 
-  const handleRemoveFamilyMember = async (linkId) => {
+  const handleRemoveFamilyMember = async (memberId) => {
+    const confirmed = window.confirm(
+      'Are you sure you want to remove this family member? This will delink your connection and their reports will no longer be visible.'
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
     try {
-      await axios.post(
-        `${API}/family/remove/${linkId}`,
+      setRemovingMemberId(memberId);
+      console.log('Removing family member:', memberId);
+
+      const response = await axios.post(
+        `${API}/family/remove/${memberId}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      toast.success("Family member removed");
 
-      setFamilyMembers((prevMembers) =>
-        prevMembers.filter((member) => member.link_id !== linkId)
-      );
+      console.log('Member removed:', response.data);
+      toast.success('Family member removed successfully');
+      fetchFamilyData();
     } catch (error) {
-      console.error("Remove member error:", error);
-      toast.error(error.response?.data?.detail || "Failed to remove family member");
+      console.error('Remove member error:', error.response?.data || error.message);
+      toast.error(error.response?.data?.detail || 'Failed to remove family member');
+    } finally {
+      setRemovingMemberId(null);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="family-page" data-testid="family-dashboard-page">
+        <Navbar user={user} onLogout={onLogout} currentPage="family" />
+        <div className="family-content">
+          <div className="loading-state" data-testid="loading-state">
+            <div className="spinner"></div>
+            Loading family data...
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="family-page" data-testid="family-dashboard-page">
       <Navbar user={user} onLogout={onLogout} currentPage="family" />
       
       <div className="family-content">
+        {/* HEADER */}
         <div className="family-header">
           <div>
             <h1 className="page-title" data-testid="family-title">Family Dashboard</h1>
@@ -137,6 +167,7 @@ export default function FamilyDashboard({ user, token, onLogout }) {
           </Button>
         </div>
 
+        {/* PENDING INVITES SECTION */}
         {invites.length > 0 && (
           <div className="invites-section" data-testid="invites-section">
             <h2>Pending Invites</h2>
@@ -172,36 +203,44 @@ export default function FamilyDashboard({ user, token, onLogout }) {
           </div>
         )}
 
-        {/* --------------------- FAMILY MEMBERS LIST --------------------- */}
+        {/* FAMILY MEMBERS SECTION */}
         <div className="family-members-section">
           <h2 data-testid="family-members-title">Connected Family Members ({familyMembers.length})</h2>
           {familyMembers.length === 0 ? (
             <div className="empty-state" data-testid="no-family-members">
               <Users size={64} />
               <h3>No Family Members Yet</h3>
-              <p>Invite family members using their unique tokens</p>
+              <p>Invite family members using their unique tokens to monitor their health reports</p>
             </div>
           ) : (
             <div className="members-grid" data-testid="members-grid">
               {familyMembers.map((member, index) => (
                 <div key={member.id} className="member-card" data-testid={`member-card-${index}`}>
+                  {/* Remove button - top right corner */}
+                  <button
+                    className="remove-member-button"
+                    onClick={() => handleRemoveFamilyMember(member.id)}
+                    disabled={removingMemberId === member.id}
+                    data-testid={`remove-member-btn-${index}`}
+                    title="Remove this family member"
+                    aria-label="Remove family member"
+                  >
+                    {removingMemberId === member.id ? (
+                      <div className="spinner-small"></div>
+                    ) : (
+                      <X size={18} />
+                    )}
+                  </button>
+
                   <Users size={32} />
                   <h3>{member.username}</h3>
-                  <Button
-                    variant="outline"
-                    onClick={() => handleRemoveFamilyMember(member.id)}
-                    size="sm"
-                    data-testid={`remove-member-${index}`}
-                  >
-                    Remove
-                  </Button>
                 </div>
               ))}
             </div>
           )}
         </div>
 
-        {/* --------------------- FAMILY REPORTS GROUPED BY MEMBER --------------------- */}
+        {/* FAMILY REPORTS GROUPED BY MEMBER */}
         <div className="family-reports-section">
           <h2 data-testid="family-reports-title">Family Reports</h2>
 
@@ -218,13 +257,13 @@ export default function FamilyDashboard({ user, token, onLogout }) {
                 );
 
                 return (
-                  <div key={member.id} className="member-report-section">
+                  <div key={member.id} className="member-report-section" data-testid={`member-report-section-${member.username}`}>
                     <h3 className="member-report-title">
-                      Reports for {member.username}
+                      📋 Reports for <span className="member-name">{member.username}</span>
                     </h3>
 
                     {memberReports.length === 0 ? (
-                      <div className="empty-state small">
+                      <div className="empty-state small" data-testid={`no-reports-${member.username}`}>
                         <FileText size={48} />
                         <p>No reports uploaded by {member.username}</p>
                       </div>
@@ -237,24 +276,37 @@ export default function FamilyDashboard({ user, token, onLogout }) {
                             data-testid={`family-report-${member.username}-${index}`}
                           >
                             <div className="report-header">
-                              <FileText size={32} />
+                              <FileText size={32} className="report-icon" />
                               <div className="report-info">
                                 <h3>Report Date: {report.report_date}</h3>
-                                <p>
-                                  Uploaded:{" "}
-                                  {new Date(report.created_at).toLocaleString()}
+                                <p className="report-time">
+                                  Uploaded: {new Date(report.created_at).toLocaleString()}
                                 </p>
                               </div>
                             </div>
 
+                            <div className="report-body">
+                              <p><strong>Files:</strong> {report.original_files?.length || 0}</p>
+                            </div>
+
                             <div className="report-actions">
-                              <a
-                                href={report.result_pdf}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                <Button size="sm">Download PDF</Button>
-                              </a>
+                              {report.result_pdf ? (
+                                <a
+                                  href={report.result_pdf}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  data-testid={`download-family-report-${member.username}-${index}`}
+                                >
+                                  <Button size="sm">
+                                    <Download size={16} />
+                                    Download PDF
+                                  </Button>
+                                </a>
+                              ) : (
+                                <Button size="sm" disabled>
+                                  No PDF
+                                </Button>
+                              )}
                             </div>
                           </div>
                         ))}
@@ -265,10 +317,10 @@ export default function FamilyDashboard({ user, token, onLogout }) {
               })}
             </div>
           )}
-
         </div>
       </div>
 
+      {/* INVITE MODAL */}
       <Dialog open={showInviteModal} onOpenChange={setShowInviteModal}>
         <DialogContent className="modal-content" data-testid="invite-modal">
           <DialogHeader>
@@ -283,8 +335,14 @@ export default function FamilyDashboard({ user, token, onLogout }) {
               data-testid="invite-token-input"
             />
             <div className="modal-actions">
-              <Button onClick={handleSendInvite} data-testid="send-invite-btn">Send Invite</Button>
-              <Button variant="outline" onClick={() => setShowInviteModal(false)} data-testid="cancel-invite-btn">
+              <Button onClick={handleSendInvite} data-testid="send-invite-btn">
+                Send Invite
+              </Button>
+              <Button 
+                variant="outline" 
+                onClick={() => setShowInviteModal(false)} 
+                data-testid="cancel-invite-btn"
+              >
                 Cancel
               </Button>
             </div>
