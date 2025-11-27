@@ -1,0 +1,53 @@
+/* ----------- FAMILY REPORT SECTION HEADINGS ----------- */
+
+.member-report-section {
+  margin-bottom: 2rem;
+  padding: 1.2rem 1.5rem;
+  background: #f9fafb; /* soft light background */
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.member-report-title {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #1f2937; /* slate-800 */
+  margin-bottom: 1rem;
+  padding-bottom: 0.4rem;
+  border-left: 4px solid #4f46e5; /* indigo accent */
+  padding-left: 10px;
+}
+
+/* small empty-state inside each section */
+.member-report-section .empty-state.small {
+  text-align: center;
+  padding: 1.5rem 0;
+  color: #6b7280;
+}
+
+.member-report-section .empty-state.small p {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+}
+
+/* Grid for reports */
+.member-report-section .reports-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+/* Report card design refresh */
+.member-report-section .report-card {
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.member-report-section .report-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}

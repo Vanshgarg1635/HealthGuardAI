@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../components/
 import { Users, UserPlus, Check, X, FileText } from 'lucide-react';
 import { toast } from 'sonner';
 import '../styles/Dashboard.css';
+import '../styles/family.css';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -97,30 +98,23 @@ export default function FamilyDashboard({ user, token, onLogout }) {
     }
   };
 
-const handleRemoveFamilyMember = async (linkId) => {
-  try {
-    // Sending the request to remove the family link by id
-    await axios.post(
-      `${API}/family/remove/${linkId}`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    toast.success("Family member removed");
+  const handleRemoveFamilyMember = async (linkId) => {
+    try {
+      await axios.post(
+        `${API}/family/remove/${linkId}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      toast.success("Family member removed");
 
-    // Update the state to remove the member from the list
-    setFamilyMembers((prevMembers) =>
-      prevMembers.filter((member) => member.link_id !== linkId)
-    );
-  } catch (error) {
-    console.error("Remove member error:", error); // Log the error for debugging
-    toast.error(error.response?.data?.detail || "Failed to remove family member");
-  }
-};
-
+      setFamilyMembers((prevMembers) =>
+        prevMembers.filter((member) => member.link_id !== linkId)
+      );
+    } catch (error) {
+      console.error("Remove member error:", error);
+      toast.error(error.response?.data?.detail || "Failed to remove family member");
+    }
+  };
 
   return (
     <div className="family-page" data-testid="family-dashboard-page">
@@ -178,13 +172,14 @@ const handleRemoveFamilyMember = async (linkId) => {
           </div>
         )}
 
+        {/* --------------------- FAMILY MEMBERS LIST --------------------- */}
         <div className="family-members-section">
           <h2 data-testid="family-members-title">Connected Family Members ({familyMembers.length})</h2>
           {familyMembers.length === 0 ? (
             <div className="empty-state" data-testid="no-family-members">
               <Users size={64} />
               <h3>No Family Members Yet</h3>
-              <p>Invite family members using their unique tokens to monitor their health reports</p>
+              <p>Invite family members using their unique tokens</p>
             </div>
           ) : (
             <div className="members-grid" data-testid="members-grid">
@@ -194,7 +189,7 @@ const handleRemoveFamilyMember = async (linkId) => {
                   <h3>{member.username}</h3>
                   <Button
                     variant="outline"
-                    onClick={() => handleRemoveFamilyMember(member.id)}  // ← Just member.id
+                    onClick={() => handleRemoveFamilyMember(member.id)}
                     size="sm"
                     data-testid={`remove-member-${index}`}
                   >
@@ -206,38 +201,71 @@ const handleRemoveFamilyMember = async (linkId) => {
           )}
         </div>
 
+        {/* --------------------- FAMILY REPORTS GROUPED BY MEMBER --------------------- */}
         <div className="family-reports-section">
           <h2 data-testid="family-reports-title">Family Reports</h2>
-          {familyReports.length === 0 ? (
+
+          {familyMembers.length === 0 ? (
             <div className="empty-state" data-testid="no-family-reports">
               <FileText size={64} />
-              <p>No reports from family members yet</p>
+              <p>No family members, so no reports yet.</p>
             </div>
           ) : (
-            <div className="reports-grid" data-testid="family-reports-grid">
-              {familyReports.map((report, index) => (
-                <div key={report.id} className="report-card" data-testid={`family-report-${index}`}>
-                  <div className="report-header">
-                    <FileText size={32} />
-                    <div className="report-info">
-                      <h3>Report Date: {report.report_date}</h3>
-                      <p>Created: {new Date(report.created_at).toLocaleString()}</p>
-                    </div>
+            <div>
+              {familyMembers.map((member) => {
+                const memberReports = familyReports.filter(
+                  (r) => r.user_id === member.id
+                );
+
+                return (
+                  <div key={member.id} className="member-report-section">
+                    <h3 className="member-report-title">
+                      Reports for {member.username}
+                    </h3>
+
+                    {memberReports.length === 0 ? (
+                      <div className="empty-state small">
+                        <FileText size={48} />
+                        <p>No reports uploaded by {member.username}</p>
+                      </div>
+                    ) : (
+                      <div className="reports-grid" data-testid={`reports-${member.username}`}>
+                        {memberReports.map((report, index) => (
+                          <div
+                            key={report.id}
+                            className="report-card"
+                            data-testid={`family-report-${member.username}-${index}`}
+                          >
+                            <div className="report-header">
+                              <FileText size={32} />
+                              <div className="report-info">
+                                <h3>Report Date: {report.report_date}</h3>
+                                <p>
+                                  Uploaded:{" "}
+                                  {new Date(report.created_at).toLocaleString()}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="report-actions">
+                              <a
+                                href={report.result_pdf}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <Button size="sm">Download PDF</Button>
+                              </a>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                  <div className="report-actions">
-                    <a
-                      href={report.result_pdf}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      data-testid={`download-family-report-${index}`}
-                    >
-                      <Button size="sm">Download Report</Button>
-                    </a>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
+
         </div>
       </div>
 
@@ -256,11 +284,7 @@ const handleRemoveFamilyMember = async (linkId) => {
             />
             <div className="modal-actions">
               <Button onClick={handleSendInvite} data-testid="send-invite-btn">Send Invite</Button>
-              <Button
-                variant="outline"
-                onClick={() => setShowInviteModal(false)}
-                data-testid="cancel-invite-btn"
-              >
+              <Button variant="outline" onClick={() => setShowInviteModal(false)} data-testid="cancel-invite-btn">
                 Cancel
               </Button>
             </div>
