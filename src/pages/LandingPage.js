@@ -110,41 +110,7 @@ export default function LandingPage({ onLogin }) {
         </div>
       </div>
 
-      <div className="features-section">
-        <h2 className="features-title" data-testid="features-title">Powerful Features</h2>
-        <div className="features-grid">
-          <div className="feature-card" data-testid="feature-ocr">
-            <div className="feature-icon">📄</div>
-            <h3>Smart OCR Extraction</h3>
-            <p>Upload medical reports in any format - PDF, images, or documents. Our OCR technology extracts all text accurately.</p>
-          </div>
-          <div className="feature-card" data-testid="feature-ai">
-            <div className="feature-icon">🤖</div>
-            <h3>AI-Powered Analysis</h3>
-            <p>Advanced Gemini AI analyzes your health parameters and provides color-coded severity levels with expert recommendations.</p>
-          </div>
-          <div className="feature-card" data-testid="feature-reports">
-            <div className="feature-icon">📊</div>
-            <h3>Comprehensive Reports</h3>
-            <p>Get detailed PDF reports with all health parameters, normal ranges, and personalized health advice.</p>
-          </div>
-          <div className="feature-card" data-testid="feature-family">
-            <div className="feature-icon">👨‍👩‍👧‍👦</div>
-            <h3>Family Dashboard</h3>
-            <p>Link family members using secure tokens and monitor their health reports in one centralized dashboard.</p>
-          </div>
-          <div className="feature-card" data-testid="feature-chat">
-            <div className="feature-icon">💬</div>
-            <h3>AI Health Assistant</h3>
-            <p>Chat with our AI assistant about your reports, get clarifications, and receive health guidance anytime.</p>
-          </div>
-          <div className="feature-card" data-testid="feature-history">
-            <div className="feature-icon">📅</div>
-            <h3>Report History</h3>
-            <p>Access all your past reports with date-based search. Track your health journey over time.</p>
-          </div>
-        </div>
-      </div>
+      
 
       {/* Login Modal */}
       <Dialog open={showLoginModal} onOpenChange={setShowLoginModal}>
