@@ -1,3 +1,324 @@
+/* --- EXISTING SHARED STYLES (Keep these from your code) --- */
+.dashboard-page, .reports-page, .family-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 50%, #bfdbfe 100%);
+}
+
+.dashboard-content, .reports-content, .family-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+  animation: fadeIn 0.6s ease-out;
+}
+
+.page-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.75rem;
+}
+
+.page-subtitle {
+  font-size: 1.1rem;
+  color: #64748b;
+}
+
+/* =========================================
+   NEW DASHBOARD SPECIFIC STYLES
+   ========================================= */
+
+/* Center alignment wrapper for dashboard */
+.dashboard-content.centered-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1000px; /* Constrain width for better reading */
+}
+
+.dashboard-header.center-text {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+/* --- Horizontal Upload Strip (Replaces the big box) --- */
+.upload-container-wrapper {
+  width: 100%;
+  max-width: 700px; /* Make the strip distinctively smaller width */
+  margin-bottom: 3rem;
+  z-index: 10;
+}
+
+.upload-strip-horizontal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border: 2px dashed #cbd5e1;
+  border-radius: 16px;
+  padding: 1rem 1.5rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+}
+
+.upload-strip-horizontal:hover, .upload-strip-horizontal.drag-active {
+  border-color: #3b82f6;
+  background: #eff6ff;
+  transform: translateY(-2px);
+}
+
+.strip-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.icon-circle-small {
+  background: #eff6ff;
+  color: #3b82f6;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.strip-text h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  color: #1e293b;
+  margin: 0;
+}
+
+.strip-text p {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.browse-btn-compact {
+  background: #3b82f6;
+  color: white;
+  border-radius: 10px;
+  padding: 0.5rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.browse-btn-compact:hover {
+  background: #2563eb;
+}
+
+/* --- Active Files Area (Below Strip) --- */
+.active-files-container {
+  margin-top: 1rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.files-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.file-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: #475569;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.file-name-truncate {
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chip-remove {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  border-radius: 50%;
+}
+
+.chip-remove:hover {
+  background: #fee2e2;
+}
+
+.analyze-btn-wide {
+  width: 100%;
+  background: #1e293b;
+  color: white;
+  padding: 0.8rem;
+  border-radius: 12px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.analyze-btn-wide:hover:not(:disabled) {
+  background: #0f172a;
+}
+
+/* --- Result Strip (Success State) --- */
+.result-strip {
+  background: #f0fdf4;
+  border: 1px solid #22c55e;
+  border-radius: 16px;
+  padding: 1rem 1.5rem;
+}
+
+.result-strip-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.result-text h3 { margin: 0; color: #166534; font-size: 1.1rem; }
+.result-text p { margin: 0; color: #15803d; font-size: 0.9rem; }
+
+.result-actions-inline {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-primary-compact { background: #16a34a; color: white; border-radius: 8px; padding: 0.5rem 1rem; }
+.btn-secondary-compact { background: transparent; border: 1px solid #86efac; color: #166534; border-radius: 8px; padding: 0.5rem 1rem;}
+
+/* --- Info Grid (Bottom Section) --- */
+.dashboard-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  width: 100%;
+  max-width: 900px;
+}
+
+.info-card-panel {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  padding: 1.5rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.8);
+}
+
+.info-card-panel h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.25rem;
+  color: #1e293b;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.info-card-panel p {
+  color: #64748b;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-top: 1rem;
+}
+
+/* Benefits Styling */
+.benefits-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.benefit-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  background: rgba(255,255,255,0.8);
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+/* Steps Styling */
+.steps-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  padding: 0 1rem;
+}
+
+.step-dot {
+  width: 28px;
+  height: 28px;
+  background: #3b82f6;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+  z-index: 2;
+}
+
+.step-line {
+  flex: 1;
+  height: 2px;
+  background: #cbd5e1;
+  margin: 0 5px;
+}
+
+.steps-labels {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.2rem;
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* --- Mobile Responsive --- */
+@media (max-width: 768px) {
+  .dashboard-info-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .upload-strip-horizontal {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .strip-left {
+    flex-direction: column;
+  }
+
+  .result-strip-content {
+    flex-direction: column;
+    text-align: center;
+  }
+}
 .dashboard-page, .reports-page, .family-page {
   min-height: 100vh;
   background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 50%, #bfdbfe 100%);
