@@ -1,0 +1,220 @@
+/* ------------------ OVERLAY & MODAL ------------------ */
+.overview-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 50px 20px;
+  z-index: 2000;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+.overview-modal {
+  width: 100%;
+  max-width: 1100px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 40px;
+  overflow-y: auto;
+  max-height: 90vh;
+  position: relative;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* ------------------ CLOSE BUTTON ------------------ */
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.close-btn:hover {
+  transform: scale(1.1);
+}
+
+/* ------------------ MODAL TITLE ------------------ */
+.overview-title {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 30px;
+  font-weight: 700;
+  color: #1e40af;
+}
+
+/* ------------------ SEVERITY SECTION ------------------ */
+.severity-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 35px;
+}
+
+.severity-card {
+  padding: 25px;
+  border-radius: 18px;
+  background: #f7f7f7;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.severity-card:hover {
+  transform: translateY(-4px);
+}
+
+.severity-card.high {
+  border-left: 6px solid #e63946;
+  background: #ffe5e5;
+  color: rgb(0, 0, 0);
+}
+
+.severity-card.medium {
+  border-left: 6px solid #ffbe0b;
+  background: #fff5da;
+}
+
+.severity-card.normal {
+  border-left: 6px solid #2a9d8f;
+  background: #e5fff7;
+}
+
+.severity-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.severity-count {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #000000;
+}
+
+.severity-card ul {
+  padding-left: 20px;
+  margin: 0;
+  max-height: 150px;
+  overflow-y: auto;
+  color:rgb(0, 0, 0);
+}
+
+.severity-card li {
+  margin-bottom: 6px;
+  font-size: 12px;
+  padding: 15px 15px;
+  border: 1px solid #0c0d0d;
+  border-radius: 25px;
+  font-weight: 1000;
+  color: #010101;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+/* ------------------ SPECIALISTS ------------------ */
+.specialist-section {
+  padding: 25px;
+  background: #eef6ff;
+  border-radius: 18px;
+  margin-bottom: 35px;
+  font-size: 15px;
+}
+
+.specialist-section h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #1e3a8a;
+}
+
+.specialists-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.specialist-pill {
+  padding: 8px 18px;
+  background: white;
+  border: 1px solid #bcd8ff;
+  border-radius: 25px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #1e40af;
+  transition: all 0.2s ease;
+}
+
+.specialist-pill:hover {
+  background: #dbeafe;
+  border-color: #93c5fd;
+}
+
+/* ------------------ LIFESTYLE ------------------ */
+.lifestyle-container {
+  background: #f7fbff;
+  padding: 25px;
+  border-radius: 18px;
+  font-size: 15px;
+}
+
+.lifestyle-container h3 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #1e3a8a;
+}
+
+.lifestyle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+}
+
+.lifestyle-grid h4 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #172d4b;
+}
+
+.lifestyle-grid ul {
+  padding-left: 20px;
+  margin: 0;
+  max-height: 160px;
+  overflow-y: auto;
+}
+
+.lifestyle-grid li {
+  margin-bottom: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #132948;
+}
+
+/* ------------------ SCROLLBAR STYLING ------------------ */
+.overview-modal::-webkit-scrollbar,
+.severity-card ul::-webkit-scrollbar,
+.lifestyle-grid ul::-webkit-scrollbar {
+  width: 6px;
+}
+
+.overview-modal::-webkit-scrollbar-thumb,
+.severity-card ul::-webkit-scrollbar-thumb,
+.lifestyle-grid ul::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.2);
+  border-radius: 3px;
+}

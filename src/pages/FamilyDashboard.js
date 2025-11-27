@@ -97,6 +97,31 @@ export default function FamilyDashboard({ user, token, onLogout }) {
     }
   };
 
+const handleRemoveFamilyMember = async (linkId) => {
+  try {
+    // Sending the request to remove the family link by id
+    await axios.post(
+      `${API}/family/remove/${linkId}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    toast.success("Family member removed");
+
+    // Update the state to remove the member from the list
+    setFamilyMembers((prevMembers) =>
+      prevMembers.filter((member) => member.link_id !== linkId)
+    );
+  } catch (error) {
+    console.error("Remove member error:", error); // Log the error for debugging
+    toast.error(error.response?.data?.detail || "Failed to remove family member");
+  }
+};
+
+
   return (
     <div className="family-page" data-testid="family-dashboard-page">
       <Navbar user={user} onLogout={onLogout} currentPage="family" />
@@ -167,6 +192,14 @@ export default function FamilyDashboard({ user, token, onLogout }) {
                 <div key={member.id} className="member-card" data-testid={`member-card-${index}`}>
                   <Users size={32} />
                   <h3>{member.username}</h3>
+                  <Button
+                    variant="outline"
+                    onClick={() => handleRemoveFamilyMember(member.id)}  // ← Just member.id
+                    size="sm"
+                    data-testid={`remove-member-${index}`}
+                  >
+                    Remove
+                  </Button>
                 </div>
               ))}
             </div>
