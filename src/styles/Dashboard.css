@@ -1276,8 +1276,8 @@
   height: 36px;
   border-radius: 6px;
   border: none;
-  background-color: #fee2e2;
-  color: #dc2626;
+  background-color: #ffffff;
+  color: #6a0c0c;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -1288,8 +1288,8 @@
 }
 
 .remove-member-button:hover:not(:disabled) {
-  background-color: #fecaca;
-  color: #991b1b;
+  background-color: #f9f7f7;
+  color: #540c0c;
   transform: scale(1.05);
 }
 
@@ -1305,7 +1305,7 @@
 .spinner-small {
   width: 16px;
   height: 16px;
-  border: 2px solid #dc2626;
+  border: 2px solid #f1efef;
   border-top: 2px solid transparent;
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
@@ -1329,8 +1329,8 @@
   height: 36px;
   border-radius: 6px;
   border: none;
-  background-color: #fee2e2;
-  color: #dc2626;
+  background-color: #ffffff;
+  color: #1a51c6;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -1342,8 +1342,8 @@
 }
 
 .report-delete-button:hover:not(:disabled) {
-  background-color: #fecaca;
-  color: #991b1b;
+  background-color: #ffffff;
+  color: #08225a;
   transform: scale(1.05);
 }
 
