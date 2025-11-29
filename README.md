@@ -1,9 +1,5 @@
 #Link to Backend
 github link:https://github.com/Vanshgarg1635/HealthGuardAI-backend
-deployment link: www.health.devwithyash.dev
-
-
-
 
 
 # Getting Started with Create React App
